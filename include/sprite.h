@@ -45,7 +45,13 @@ typedef struct
     /**
      * @brief Sprite index in memory managed by GBAlatro
      */
-    int idx;
+    s16 idx;
+
+    /**
+     * @brief The mode of the sprite (regular, affine, etc.), set when the sprite is created
+     * corresponds to A0 & ATTR0_MODE_MASK
+     */
+    u16 mode;
 } Sprite;
 
 /**
@@ -121,7 +127,7 @@ typedef struct
  * @return Valid Sprite if allocations are successful.
  *         Otherwise, return **NULL**.
  */
-Sprite* sprite_new(u16 a0, u16 a1, u32 tid, u32 pb, int sprite_index);
+Sprite* sprite_new(u16 a0, u16 a1, u32 tid, u32 pb, s16 sprite_index);
 
 /**
  * @brief Destroy Sprite
@@ -137,7 +143,7 @@ void sprite_destroy(Sprite** sprite);
  *
  * @return Index of sprite in object buffer if `sprite` is valid, otherwise **UNDEFINED**.
  */
-int sprite_get_layer(Sprite* sprite);
+s16 sprite_get_layer(Sprite* sprite);
 
 /**
  * @brief Get a Sprite's width and height
@@ -184,6 +190,19 @@ bool sprite_get_width(Sprite* sprite, int* width);
 int sprite_get_pb(const Sprite* sprite);
 
 /**
+ * @brief Hides the sprite by manipulating ATTR0_HIDE in OAM.
+ * @param sprite The sprite to hide
+ */
+void sprite_hide(Sprite* sprite);
+
+/**
+ * @brief Unhides the sprite by manipulating ATTR0_HIDE in OAM.
+ * The sprite's ATTR0_MODE is maintained from the sprite's creation with @ref sprite_new()
+ * @param sprite The sprite to unhide
+ */
+void sprite_unhide(Sprite* sprite);
+
+/**
  * @brief Initialize GBAlatro sprite system
  */
 void sprite_init(void);
@@ -223,6 +242,19 @@ void sprite_object_destroy(SpriteObject* sprite_object);
  *                      Cannot be **NULL**.
  */
 void sprite_object_set_sprite(SpriteObject* sprite_object, Sprite* sprite);
+
+/**
+ * @brief Hides the SpriteObject by manipulating ATTR0_HIDE in OAM.
+ * @param sprite_object The SpriteObject to hide
+ */
+void sprite_object_hide(SpriteObject* sprite_object);
+
+/**
+ * @brief Unhides the SpriteObject by manipulating ATTR0_HIDE in OAM.
+ * The sprite's ATTR0_MODE is maintained from the sprite's creation with @ref sprite_new()
+ * @param sprite_object The SpriteObject to unhide
+ */
+void sprite_object_unhide(SpriteObject* sprite_object);
 
 /**
  * @brief Reset SpriteObject's transform back to default values.

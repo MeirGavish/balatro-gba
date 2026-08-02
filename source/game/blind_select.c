@@ -260,7 +260,7 @@ static void game_blind_select_selected_anim_seq()
     {
         for (int i = 0; i < NUM_BLINDS_PER_ANTE; i++)
         {
-            obj_hide(blind_select_tokens[i]->obj);
+            sprite_hide(blind_select_tokens[i]);
         }
 
         s_timer = TM_ZERO;
@@ -445,7 +445,7 @@ static void blind_tokens_init()
 
     for (int i = 0; i < NUM_BLINDS_PER_ANTE; i++)
     {
-        obj_hide(blind_select_tokens[i]->obj);
+        sprite_hide(blind_select_tokens[i]);
     }
 }
 
@@ -494,7 +494,7 @@ void game_blind_select_change_background(void)
 {
     for (int i = 0; i < NUM_BLINDS_PER_ANTE; i++)
     {
-        obj_unhide(blind_select_tokens[i]->obj, ATTR0_REG);
+        sprite_unhide(blind_select_tokens[i]);
     }
 
     // Default y position for the blind select tokens. 12 is the amount of tiles the background
