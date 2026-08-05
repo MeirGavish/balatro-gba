@@ -589,7 +589,7 @@ static bool game_round_hand_row_on_selection_changed(
              */
             play_sfx(
                 SFX_CARD_FOCUS,
-                MM_BASE_PITCH_RATE + rng_get_u32() % CARD_FOCUS_SFX_PITCH_OFFSET_RANGE,
+                MM_BASE_PITCH_RATE + rng_get_u32(RNG_SEQ_MISC) % CARD_FOCUS_SFX_PITCH_OFFSET_RANGE,
                 SFX_DEFAULT_VOLUME
             );
         }
@@ -609,7 +609,7 @@ static bool game_round_hand_row_on_selection_changed(
              */
             play_sfx(
                 SFX_CARD_FOCUS,
-                MM_BASE_PITCH_RATE + rng_get_u32() % CARD_FOCUS_SFX_PITCH_OFFSET_RANGE,
+                MM_BASE_PITCH_RATE + rng_get_u32(RNG_SEQ_MISC) % CARD_FOCUS_SFX_PITCH_OFFSET_RANGE,
                 SFX_DEFAULT_VOLUME
             );
         }

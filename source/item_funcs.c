@@ -6,7 +6,7 @@
 #include "joker.h"
 #include "util.h"
 
-static Item* item_roll_new_unimplemented();
+static Item* item_roll_new_unimplemented(enum RngSequence key);
 static void item_acquire_unimplemented(Item* item);
 static bool item_always_can_acquire(Item* item);
 
@@ -47,7 +47,7 @@ ItemFuncs* get_item_type_funcs(enum ItemType type)
     return &item_func_table[type];
 }
 
-static Item* item_roll_new_unimplemented()
+static Item* item_roll_new_unimplemented(enum RngSequence key)
 {
     MGBA_FUNC_ERROR("Unimplemented roll_new function called");
     return NULL;

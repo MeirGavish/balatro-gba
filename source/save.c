@@ -178,7 +178,7 @@ typedef struct SaveGame
 static const SaveGame SaveGame_default = {
     .tag_internal = "-INTERNAL DATA -",
     .timer = 0,
-    .rng_info = {0, 0},
+    .rng_info = {0, {0}},
     .round = 0,
     .ante = 0,
     .money = 0,

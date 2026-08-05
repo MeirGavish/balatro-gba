@@ -1090,7 +1090,7 @@ static u32 misprint_joker_effect(
 
     *joker_effect = &s_shared_joker_effect;
 
-    (*joker_effect)->mult = rng_get_u32() % (MISPRINT_MAX_MULT + 1);
+    (*joker_effect)->mult = rng_get_u32(RNG_SEQ_JOKER_MISPRINT) % (MISPRINT_MAX_MULT + 1);
 
     return JOKER_EFFECT_FLAG_MULT;
 }
@@ -1301,7 +1301,7 @@ static u32 reserved_parking_joker_effect(
 
     u32 effect_flags_ret = JOKER_EFFECT_FLAG_NONE;
 
-    if ((rng_get_u32() % 2 == 0) && card_is_face(scored_card))
+    if (card_is_face(scored_card) && (rng_get_u32(RNG_SEQ_JOKER_RESERVED_PARKING) % 2 == 0))
     {
         *joker_effect = &s_shared_joker_effect;
 
@@ -1323,7 +1323,7 @@ static u32 business_card_joker_effect(
 
     u32 effect_flags_ret = JOKER_EFFECT_FLAG_NONE;
 
-    if ((rng_get_u32() % 2 == 0) && card_is_face(scored_card))
+    if (card_is_face(scored_card) && (rng_get_u32(RNG_SEQ_JOKER_BUSINESS_CARD) % 2 == 0))
     {
         *joker_effect = &s_shared_joker_effect;
 

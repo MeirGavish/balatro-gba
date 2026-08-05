@@ -113,6 +113,7 @@ static void s_joker_pb_remove_sprite_user(int pb);
 static int s_joker_pb_get_num_sprite_users(int joker_pb);
 static int s_get_unused_joker_pb(void);
 static int s_allocate_pb_if_needed(u8 joker_id);
+static int joker_get_random_rarity(enum RngSequence key);
 
 void joker_init()
 {
@@ -348,7 +349,7 @@ void joker_reset_rollable_jokers(void)
 /**
  * @brief Rolls a random Joker among the available ones
  */
-static int joker_roll_id(void)
+static int joker_roll_id(enum RngSequence key)
 {
     // Now determine how many jokers are available based on the rarity
     int jokers_avail_size = get_num_rollable_jokers();
@@ -357,10 +358,10 @@ static int joker_roll_id(void)
         return UNDEFINED;
 
     // Roll for what rarity the joker will be
-    int joker_rarity = joker_get_random_rarity();
+    int joker_rarity = joker_get_random_rarity(key);
 
     int matching_joker_ids[jokers_avail_size];
-    int fallback_random_idx = rng_get_u32() % jokers_avail_size;
+    int fallback_random_idx = rng_get_u32(key) % jokers_avail_size;
     int fallback_random_joker_id = UNDEFINED;
     int match_count = 0;
 
@@ -379,13 +380,13 @@ static int joker_roll_id(void)
         }
     }
 
-    int selected_joker_id = (match_count > 0) ? matching_joker_ids[rng_get_u32() % match_count]
+    int selected_joker_id = (match_count > 0) ? matching_joker_ids[rng_get_u32(key) % match_count]
                                               : fallback_random_joker_id;
 
     return selected_joker_id;
 }
 
-Item* joker_object_roll_new(void)
+Item* joker_object_roll_new(enum RngSequence key)
 {
     if (no_rollable_jokers())
         return NULL;
@@ -406,7 +407,7 @@ Item* joker_object_roll_new(void)
     else
 #endif
     {
-        joker_id = joker_roll_id();
+        joker_id = joker_roll_id(key);
     }
 
     // If for some reason only no joker is left, don't make another
@@ -416,6 +417,37 @@ Item* joker_object_roll_new(void)
     joker_set_rollable(joker_id, false);
 
     return (Item*)joker_object_new(joker_new(joker_id));
+}
+
+/**
+ * @brief Get a random rarity a Joker will be rolled from
+ *
+ * @param key to the RNG sequence used
+ * @return a random Joker rarity
+ */
+static inline int joker_get_random_rarity(enum RngSequence key)
+{
+    int joker_rarity = 0;
+    int rarity_roll = rng_get_u32(key) % 100;
+    if (rarity_roll < COMMON_JOKER_CHANCE)
+    {
+        joker_rarity = COMMON_JOKER;
+    }
+    else if (rarity_roll < COMMON_JOKER_CHANCE + UNCOMMON_JOKER_CHANCE)
+    {
+        joker_rarity = UNCOMMON_JOKER;
+    }
+    else if (rarity_roll < COMMON_JOKER_CHANCE + UNCOMMON_JOKER_CHANCE + RARE_JOKER_CHANCE)
+    {
+        joker_rarity = RARE_JOKER;
+    }
+    else if (rarity_roll < COMMON_JOKER_CHANCE + UNCOMMON_JOKER_CHANCE + RARE_JOKER_CHANCE +
+                               LEGENDARY_JOKER_CHANCE)
+    {
+        joker_rarity = LEGENDARY_JOKER;
+    }
+
+    return joker_rarity;
 }
 
 static void set_and_shift_text(char* str, int* cursor_pos_x, int* cursor_pos_y, int color_pb)
@@ -533,31 +565,6 @@ Sprite* joker_object_get_sprite(JokerObject* joker_object)
     if (joker_object == NULL)
         return NULL;
     return sprite_object_get_sprite((SpriteObject*)joker_object);
-}
-
-int joker_get_random_rarity()
-{
-    int joker_rarity = 0;
-    int rarity_roll = rng_get_u32() % 100;
-    if (rarity_roll < COMMON_JOKER_CHANCE)
-    {
-        joker_rarity = COMMON_JOKER;
-    }
-    else if (rarity_roll < COMMON_JOKER_CHANCE + UNCOMMON_JOKER_CHANCE)
-    {
-        joker_rarity = UNCOMMON_JOKER;
-    }
-    else if (rarity_roll < COMMON_JOKER_CHANCE + UNCOMMON_JOKER_CHANCE + RARE_JOKER_CHANCE)
-    {
-        joker_rarity = RARE_JOKER;
-    }
-    else if (rarity_roll < COMMON_JOKER_CHANCE + UNCOMMON_JOKER_CHANCE + RARE_JOKER_CHANCE +
-                               LEGENDARY_JOKER_CHANCE)
-    {
-        joker_rarity = LEGENDARY_JOKER;
-    }
-
-    return joker_rarity;
 }
 
 static int s_get_num_spritesheets()

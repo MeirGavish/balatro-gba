@@ -12,6 +12,7 @@
 #define ITEM_H
 
 #include "mgba_logger.h"
+#include "random.h"
 #include "sprite.h"
 
 // TODO: Merge these with GBAL_RETURN_IF_NULL macros?
@@ -95,7 +96,7 @@ typedef struct ItemFuncs
      * All items must implement the following since they are called by the shop and all items
      * must be capable of appearing in the shop.
      */
-    Item* (*roll_new)(void);
+    Item* (*roll_new)(enum RngSequence key);
     int (*get_buy_price)(Item* item);
     bool (*can_acquire)(Item* item);
     void (*acquire)(Item* item);
@@ -113,10 +114,11 @@ typedef struct ItemFuncs
  * Matches @ref ItemFuncs.roll_new()
  *
  * @param item_type The type of the item to roll
+ * @param key to the RNG sequence used to roll the Item
  *
  * @return The newly created randomly rolled item
  */
-Item* item_roll_new(enum ItemType item_type);
+Item* item_roll_new(enum ItemType item_type, enum RngSequence key);
 
 /**
  * @brief Returns the buy price of the item.

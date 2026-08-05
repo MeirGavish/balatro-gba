@@ -10,6 +10,7 @@
 #include "game.h"
 #include "graphic_utils.h"
 #include "item.h"
+#include "random.h"
 
 #include <maxmod.h>
 
@@ -238,9 +239,11 @@ void joker_reset_rollable_jokers(void);
 /**
  * @brief Roll and create a new JokerObject item.
  *
+ * @param key to the RNG sequence that will be used to roll the Joker ID.
+ *
  * @return Newly created `Item*` (JokerObject) or NULL if none available.
  */
-Item* joker_object_roll_new(void);
+Item* joker_object_roll_new(enum RngSequence key);
 
 // This scores the joker and returns true if it was scored successfully
 // card_object = NULL means the joker_event does not concern a particular Card, i.e. Independend or
@@ -253,6 +256,5 @@ bool joker_object_score(
 );
 
 Sprite* joker_object_get_sprite(JokerObject* joker_object);
-int joker_get_random_rarity();
 
 #endif // JOKER_H

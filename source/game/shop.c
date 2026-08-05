@@ -237,7 +237,7 @@ void game_shop_on_init(void)
 static Item* game_shop_create_top_row_item(void)
 {
     // TODO: Randomize item type when consumables are implemented
-    return item_roll_new(ITEM_TYPE_JOKER);
+    return item_roll_new(ITEM_TYPE_JOKER, RNG_SEQ_SHOP_ITEMS);
 }
 
 /**

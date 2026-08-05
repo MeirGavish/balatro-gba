@@ -98,7 +98,7 @@ static StateMachine game_sm = STATE_MACHINE_DEFINE(state_info, GAME_STATE_MAX);
 GameVariables g_game_vars = {
     .timer = 0,
     // Setting the seed to an invalid value so that the Run Setup screen knows we're not reusing a previous Run's seed
-    .rng_info = {UNDEFINED, 0},
+    .rng_info = {UNDEFINED, {0}},
 
     .round = 0, .ante = 0, .money = 0, .hand_size = DEFAULT_HAND_SIZE,
     .deck = DECK_TYPE_RED,
@@ -645,7 +645,7 @@ void deck_shuffle(void)
 {
     for (int i = s_deck_top; i > 0; i--)
     {
-        int j = rng_get_u32() % (i + 1);
+        int j = rng_get_u32(RNG_SEQ_CARD_SHUFFLE) % (i + 1);
         Card* temp = s_deck[i];
         s_deck[i] = s_deck[j];
         s_deck[j] = temp;

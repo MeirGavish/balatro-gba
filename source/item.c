@@ -6,7 +6,7 @@
 
 #include <tonc.h>
 
-Item* item_roll_new(enum ItemType item_type)
+Item* item_roll_new(enum ItemType item_type, enum RngSequence key)
 {
     if ((int)item_type < 0 || item_type >= ITEM_NUM_TYPES)
     {
@@ -18,7 +18,7 @@ Item* item_roll_new(enum ItemType item_type)
     GBAL_RETURN_IF_NULL_RET(item_funcs, NULL);
     GBAL_RETURN_IF_NULL_RET(item_funcs->roll_new, NULL);
 
-    return item_funcs->roll_new();
+    return item_funcs->roll_new(key);
 }
 
 int item_get_buy_price(Item* item)

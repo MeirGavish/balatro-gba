@@ -171,7 +171,7 @@ enum BlindType roll_blind_type(bool showdown)
     }
 
     // roll a random blind among the unbeaten ones
-    int random_blind_idx = rng_get_u32() % list_get_len(p_unbeaten_blinds);
+    int random_blind_idx = rng_get_u32(RNG_SEQ_BLIND) % list_get_len(p_unbeaten_blinds);
     Blind* random_blind = list_get_at_idx(p_unbeaten_blinds, random_blind_idx);
 
     return random_blind->type;
